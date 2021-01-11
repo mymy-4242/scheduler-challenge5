@@ -16,7 +16,6 @@ $(document).ready(function() {
         descriptions = [];
     } 
     
-    
 
     //build daily schedule
         for (var hour=9; hour <=17; hour++) {
@@ -68,11 +67,11 @@ $(document).ready(function() {
 
             // change row color 
             if (moment().isAfter(hour)) {
-                $(descriptionInput).addClass("bg-secondary");
+                $(descriptionInput).addClass("past");
             } else if (moment() = hour) {
-                $(descriptionInput).addClass("bg-danger");
+                $(descriptionInput).addClass("present");
             } else if (Math.abs(moment().diff(hour)) >= 1) {
-                $(descriptionInput).addClass("bg-success");
+                $(descriptionInput).addClass("future");
             }
 
             //append description column to rows
@@ -87,47 +86,31 @@ $(document).ready(function() {
                 .addClass('saveBtn');
 
             //save button
-            var $saveTask = $('<button>')
+            var saveBtn = $('<button>')
+                .attr('type', 'submit')
                 .attr('hour-index', index)
                 .attr('id', `saveId-${index}`)
-                .attr('class', "fas fa-save")
-                .addClass('btn-save');
+                .attr('class', "fas fa-save");
              
             //append save column to rows
             $divRows.append($divSaveCol);
             //append save button to save column
-            $divSaveCol.append($saveTask);
+            $divSaveCol.append(saveBtn);
+
+  
+            //save task
+            $(`saveId-${index}`).on('click', function(event) {
+                //prevent default
+                event.preventDefault();
+
+                localStorage.setItem("descriptions", JSON.stringify(descriptions));
+    
+            });
             
             //append rows to container
             $('#schedule').append($divRows);
         }
-        
       
-
-
-        
-        //save description function
-        /*var saveDescription = function() {
-            localStorage.setItem("descriptions", JSON.stringify(descriptions));
-        };
-        
-        //save button clicked
-        $("`saveId-${index}` .btn-save").click(function(event) {
-            //prevent default
-            event.preventDefault();
-            //get value
-            var planText = $("descriptionsInput")
-                .val()
-                .trim();
-
-            //push value to description
-            if (planText) {
-                descriptions.push(planText);
-            }
-
-            saveDescription();
-        });*/
-        
 
     //current day function
     displayDate();
