@@ -28,8 +28,6 @@ $(document).ready(function() {
                 .addClass('row')
                 .attr('hour-index', index);
 
-                console.log(hour-index);
-
             //build time columns
             let $divTimeCol = $('<div>')
                 .addClass('col-2')
@@ -68,6 +66,15 @@ $(document).ready(function() {
                 .attr('id', `inputId-${index}`)
                 .val(descriptions[index]);
 
+            // change row color 
+            if (moment().isAfter(hour)) {
+                $(descriptionInput).addClass("bg-secondary");
+            } else if (moment() = hour) {
+                $(descriptionInput).addClass("bg-danger");
+            } else if (Math.abs(moment().diff(hour)) >= 1) {
+                $(descriptionInput).addClass("bg-success");
+            }
+
             //append description column to rows
             $divRows.append($divDescriptionCol);
             //append description input to description column
@@ -95,17 +102,7 @@ $(document).ready(function() {
             $('#schedule').append($divRows);
         }
         
-        //row color function
-        var changeRowColor = function(descriptionsEl) {
-            var hours = $(descriptionsEl).find($timeBlockSpan).text();
-            var time = moment(hours);
-            if (moment().isBefore(time)) {
-                $(descriptionsEl).addClass("secondary");
-            } else if (Math.abs(moment().diff(now)) >=1) {
-                $(descriptionsEl).addClass("success");
-            } 
-        
-        }
+      
 
 
         
@@ -134,28 +131,6 @@ $(document).ready(function() {
 
     //current day function
     displayDate();
-    changeRowColor();
 });
-
-//in a cloumn, create a form with 2 columns, one for description and one for the save button
-//make p elements in every description column
-//give p elements for each row a specific id
-//on click, allow p elements to be edited
-//on save click, allow p elements to be saved
-
-           /* //append description column to rows
-            $divRows.append($divDescriptionCol);
-
-            var descriptionInput = $('<input>')
-                .addClass("plan-item");
-
-            var descriptionP = $('<p>')
-                .text(descriptionText);
-
-            //append p element to input
-            descriptionInput.append(descriptionP);
-            
-            //append input to description columns*/
-
 
 
