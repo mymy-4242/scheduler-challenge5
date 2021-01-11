@@ -13,10 +13,9 @@ $(document).ready(function() {
     var descriptions = JSON.parse(localStorage.getItem("descriptions"));
     //if nothing in local storage, create new object to track new plans
     if (!descriptions) {
-        descriptions = {
-            planText: []
-        };
-    }
+        descriptions = [];
+    } 
+    
     
 
     //build daily schedule
@@ -67,7 +66,7 @@ $(document).ready(function() {
                 .attr('type', 'text')
                 .attr('hour-index', index)
                 .attr('id', `inputId-${index}`)
-                .val(planText[index]);
+                .val(descriptions[index]);
 
             //append description column to rows
             $divRows.append($divDescriptionCol);
@@ -78,13 +77,14 @@ $(document).ready(function() {
             //build save columns
             let $divSaveCol = $('<div>')
                 .addClass('col-2')
+                .addClass('saveBtn');
 
             //save button
             var $saveTask = $('<button>')
-                .addClass('saveBtn')
                 .attr('hour-index', index)
                 .attr('id', `saveId-${index}`)
-                .attr('class', "fas fa-save");
+                .attr('class', "fas fa-save")
+                .addClass('btn-save');
              
             //append save column to rows
             $divRows.append($divSaveCol);
@@ -96,25 +96,45 @@ $(document).ready(function() {
         }
         
         //row color function
-        /*var changeRowColor = function($displayHour, hour) {
-            var now = moment();
-            if (hour < now) {
-                $
-            }
-        }*/
+        var changeRowColor = function(descriptionsEl) {
+            var hours = $(descriptionsEl).find($timeBlockSpan).text();
+            var time = moment(hours);
+            if (moment().isBefore(time)) {
+                $(descriptionsEl).addClass("secondary");
+            } else if (Math.abs(moment().diff(now)) >=1) {
+                $(descriptionsEl).addClass("success");
+            } 
+        
+        }
 
 
-        /*
-        //save function
-        var saveDescription = function() {
-            event.preventDefault();
-            localStorage.setItem("description", JSON.stringify(description));
+        
+        //save description function
+        /*var saveDescription = function() {
+            localStorage.setItem("descriptions", JSON.stringify(descriptions));
         };
         
-        */
+        //save button clicked
+        $("`saveId-${index}` .btn-save").click(function(event) {
+            //prevent default
+            event.preventDefault();
+            //get value
+            var planText = $("descriptionsInput")
+                .val()
+                .trim();
+
+            //push value to description
+            if (planText) {
+                descriptions.push(planText);
+            }
+
+            saveDescription();
+        });*/
+        
 
     //current day function
     displayDate();
+    changeRowColor();
 });
 
 //in a cloumn, create a form with 2 columns, one for description and one for the save button
